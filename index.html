@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./evo-calendar.midnight-blue.min.css">
+    <link rel="stylesheet" href="./evo-calendar.min.css">
+    <link rel="stylesheet" media="screen and (max-width: 572px)" href="./style.css">
+</head>
+<body>
+    <div class="hero">
+        <div id="calendar"></div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="./evo-calendar.min.js"></script>
+
+
+    
+    <script>
+
+        
+       $(document).ready(function() {
+
+
+        const api_url = "https://calendarific.com/api/v2/holidays?&api_key=b7741991fb50e2d2ca85db3ee33adcbfd177080f&country=IN&year=2022";
+        var finalEvents = [];
+        async function getapi(url) {
+            const response = await fetch(url);
+            var data = await response.json();
+    console.log(data);
+    console.log(data.response.holidays[0]);
+    let array =  await data.response.holidays
+
+     for(let i = 0; i<array.length;i++ ){
+       let one =  data.response.holidays[i].date.iso.slice(5);
+       let two = "-2022";
+       let final = one + two;
+       let eventUnit = {
+            id:`event ${i}`,
+            name:`${data.response.holidays[i].name}`,
+            date:`${final}`,
+            description: `${data.response.holidays[i].description}`,
+            type: "holiday",
+            everyYear: true ,// optional
+            color: "#63d867"
+        }
+        finalEvents.push(eventUnit);
+    }
+
+
+        }
+        getapi(api_url);
+
+
+console.log(finalEvents);
+
+
+
+            $('#calendar').evoCalendar({
+             
+                calendarEvents: finalEvents
+
+            })
+        })
+    </script>
+</body>
+</html>
